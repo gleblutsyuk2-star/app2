@@ -1,0 +1,23 @@
+name: n8n-ai-bot
+services:
+- name: web
+  github:
+    repo: gleblutsyuk2-star/app2
+    branch: main
+  source_dir: /
+  run_command: n8n start
+  environment_slug: docker
+  instance_count: 1
+  instance_size_slug: basic-xxs
+  http_port: 8080
+  routes:
+  - path: /
+  envs:
+  - key: N8N_BASIC_AUTH_ACTIVE
+    value: true
+  - key: N8N_BASIC_AUTH_USER
+    value: admin
+  - key: N8N_BASIC_AUTH_PASSWORD
+    value: 100809gL
+  - key: N8N_PORT
+    value: 8080
