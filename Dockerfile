@@ -1,0 +1,11 @@
+FROM n8nio/n8n:1.117.2
+
+ENV N8N_BASIC_AUTH_ACTIVE=true
+ENV N8N_BASIC_AUTH_USER=admin
+ENV N8N_BASIC_AUTH_PASSWORD=your_strong_password_123
+ENV N8N_PORT=8080
+ENV N8N_PROTOCOL=https
+ENV DB_TYPE=sqlite
+ENV DB_SQLITE_DATABASE=/home/node/.n8n/database.sqlite
+
+CMD ["n8n", "start"]
