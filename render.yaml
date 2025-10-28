@@ -1,18 +1,14 @@
-# Use this Blueprint to deploy n8n on Render as a web
-# service that uses a Postgres database to store
-# workflow data.
-
 services:
   - type: web
     plan: free
     runtime: image
     name: n8n-service
     image:
-      url: docker.io/n8nio/n8n:latest
-
-    # Ключевые переменные окружения для n8n
+      url: docker.io/n8nio/n8n:1.40.0
+    
+    healthCheckPath: /healthz
+    
     envVars:
-      # Безопасность
       - key: N8N_ENCRYPTION_KEY
         generateValue: true
       - key: N8N_BASIC_AUTH_ACTIVE
@@ -20,41 +16,18 @@ services:
       - key: N8N_BASIC_AUTH_USER
         value: admin
       - key: N8N_BASIC_AUTH_PASSWORD
-        value: your_strong_password_123  # ЗАМЕНИТЕ на свой пароль!
-
-      # Настройки сервера
+        value: your_actual_password_here
       - key: N8N_PORT
-        value: 10000  # Render использует порт 10000
+        value: 10000
       - key: N8N_HOST
         value: 0.0.0.0
       - key: N8N_PROTOCOL
         value: https
-
-      # База данных
+      - key: N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS
+        value: "false"
+      
+      # Используем SQLite вместо PostgreSQL
       - key: DB_TYPE
-        value: postgresdb
-      - key: DB_POSTGRESDB_DATABASE
-        fromDatabase:
-          name: n8n-db
-          property: database
-      - key: DB_POSTGRESDB_HOST
-        fromDatabase:
-          name: n8n-db
-          property: host
-      - key: DB_POSTGRESDB_PASSWORD
-        fromDatabase:
-          name: n8n-db
-          property: password
-      - key: DB_POSTGRESDB_USER
-        fromDatabase:
-          name: n8n-db
-          property: user
-      - key: DB_POSTGRESDB_PORT
-        value: 5432
-
-    # Настройки здоровья приложения - исправленные названия полей
-    healthCheckPath: /healthz
-
-databases:
-  - name: n8n-db
-    plan: free
+        value: sqlite
+      - key: DB_SQLITE_DATABASE
+        value: /home/node/.n8n/database.sqlite
